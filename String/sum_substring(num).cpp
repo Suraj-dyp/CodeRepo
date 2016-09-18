@@ -1,5 +1,5 @@
 /**************Problem*********************
-Find Sum of Substring of a string(Contains only Digits)
+Find Sum of Each Digits of a Substring of a string(Contains only Digits)
 ******************************************/
 /*********************Algorithm*****************
 1)Iterative---using atoi() of stdlib.h
