@@ -13,6 +13,16 @@ sum of substring from i=start index to j=end index can be sum of substring from 
 sum[i,j]=sum[i,k]+sum[k+1,j]
 */
 
+/*
+(Also Overlapping of subproblems)
+      1-4                         1-2  
+     /    \                      /   \
+  1-2      3-4                 1-1   2-2
+  / \      /  \
+1-1 2-2   3-3  4-4
+  
+  */
+
 /************************Algorithm***************
      Dynamic Programming(Bottom up approach) beacuse i could easily find out sum of substring from i=0 to j=0, i=1 to j=1 and so on(All are of length 1).
 
