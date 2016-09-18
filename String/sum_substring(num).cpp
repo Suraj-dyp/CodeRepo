@@ -72,5 +72,4 @@ int main()
   cout << "Sum is: " <<  sumSubstring_Recursive2(start,end)<< endl;
   cout << "Sum is: " << sumSubstring_Iterative(start,end)<< endl;
   cout << "Sum is: " << sumSubstring_Iterative1(start,end)<< endl;
-  
 }
