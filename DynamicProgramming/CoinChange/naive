@@ -1,0 +1,43 @@
+/***************Problem*******************************
+How many ways to make change from  n-rupee from m type of coins
+*******************************************************/
+/************Algorithm************************
+Solution consists of sum of:
+a)count which does not contain last coin
+b)count which contains atleast one last coin
+count(S,m,n)=count(S,m-1,n)+count(S,m,n-S[m-1])          //optimal substructure
+*********************************************/
+#include<iostream>
+using namespace std;
+
+int count(int S[], int m, int n)
+{
+  //m could be <,=,> 0 AND n could be <,=,> 0
+  //Base case exists for all combinations except following combination m>0 and n>0
+  //n=0 and for all possible m(i.e. m <,=,> 0)     output is 1(do not select anything)
+  //n<0 and for all possible m(i.e. m <,=,> 0)     output is 0(nothing to solve)
+  //n>0 and m<=0   output is 0(No coin to solve)
+  //n>0 and m>0 is not base case(recursion case)
+  if(m<=0 && n>0)
+    return 0;
+  if(n==0)
+    return 1;
+  if(n<0)
+    return 0;
+  //recursion case
+  return count(S,m-1,n)+count(S,m,n-S[m-1]);
+}
+
+int main()
+{
+  int n,m;
+  cout << "Enter n: ";
+  cin >> n;
+  cout << "Enter m: ";
+  cin >> m;
+  int S[m];
+  cout << "Enter coins: ";
+  for(int i=0;i<m;i++)
+    cin >> S[i];
+  cout << "No of ways: " << count(S,m,n) << endl;
+}
