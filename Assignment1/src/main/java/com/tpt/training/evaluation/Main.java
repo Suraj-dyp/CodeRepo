@@ -21,34 +21,48 @@ public class Main {
 	public static void main(String[] args) {
 		
 		//Admin Role
-		Admin admin = new Admin("Tarun", 10, "tarun.kumar@iongroup.com");
-		boolean choice = true;
+		/*Admin admin = new Admin("Tarun", 10, "tarun.kumar@iongroup.com");
+	 	String choice = "N";
 		do {
 			System.out.println("Adding a reviewer");
 			Reviewer reviewer = getReviewer();
 			admin.addCodeReviewers(reviewer);
-			System.out.println("Do you want to continue adding Reviewers?");
-			choice = input.nextBoolean();
+			System.out.println("Do you want to continue adding Reviewers(Y/N) ?");
+			choice = input.next();
 		}while(choice);
 		
-		//admin.getReviewers();
+		//admin.getReviewers();*/
 		
 		//Reviewee placed a request
+		System.out.println("You are a reviewee");
+		System.out.println("Enter your name: ");
+		String revieweeName = input.next();
+		System.out.println("Enter your employee id:");
+		int userId = input.nextInt();
+		System.out.println("Enter your email:");
+		String email = input.next();
 		Reviewee reviewee = new Reviewee("Bhavik", 20, "bhavik.k@iongroup.com");
-		Reviewee.requestCodeReviews();
+		reviewee.requestCodeReviews("Suraj", "Trade", "its small", "open", 10);
+		
+		//Reviewee placed a request
+		Reviewee reviewee1 = new Reviewee("Bhavik", 20, "bhavik.k@iongroup.com");
+		reviewee1.requestCodeReviews("Suraj", "Trade", "its small", "open", 5);
 		
 		//Reviewer retrieve 
-		Reviewer reviewer = new Reviewer("Suraj", 30, "suraj.kumar@iongroup.com", getModules());
+		ArrayList<String> modules = new ArrayList<String>();
+		modules.add("validation");
+		Reviewer reviewer = new Reviewer("Suraj", 30, "suraj.kumar@iongroup.com", modules);
 		reviewer.accumulateRequest();
 		
 		
 		long timeReview=0;
 		for(ReviewRequest requestReview : Reviewee.getReviewRequests()) {
 			timeReview = requestReview.getReviewTime();
-			System.out.println(requestReview.getClosedTime());
-			System.out.println(requestReview.getRequestTime());
+			System.out.println("Review Time: " + timeReview);
+			//System.out.println(requestReview.getClosedTime());
+			//System.out.println(requestReview.getRequestTime());
 		}
-		System.out.println(timeReview);
+		
 		
 		
 		

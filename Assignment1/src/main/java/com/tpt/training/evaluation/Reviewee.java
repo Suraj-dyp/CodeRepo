@@ -18,9 +18,9 @@ public class Reviewee extends User {
 		super(name, userId, emailId);
 	}
 	
-	public static void requestCodeReviews() {
+	public void requestCodeReviews(String reviewerName, String module, String descriptionCodeChanges, String status, long requestTime) {
 		
-		ReviewRequest reviewRequest = new ReviewRequest("Suraj", "trade capture", "performance", "open", 10); //(new Date()).getTime()
+		ReviewRequest reviewRequest = new ReviewRequest(reviewerName, module, descriptionCodeChanges, status, requestTime); 	//(new Date()).getTime() could be used
 		reviewRequests.add(reviewRequest);
 		
 	}

@@ -5,6 +5,7 @@ package com.tpt.training.evaluation;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
 
 import javax.management.loading.PrivateClassLoader;
 
@@ -14,7 +15,7 @@ import javax.management.loading.PrivateClassLoader;
  */
 public class Reviewer extends User{
 	
-	
+	Scanner input = new Scanner(System.in);
 	ArrayList<String> modules = new ArrayList<String>();
 	
 	
@@ -26,16 +27,33 @@ public class Reviewer extends User{
 	
 	public void accumulateRequest() {
 		
+		String status = null;
+		String comments = null;
+		long closedTime = 0L;
+		
 		ArrayList<ReviewRequest> reviewRequests = Reviewee.getReviewRequests();
 		for(ReviewRequest reviewRequest : reviewRequests) {
 			if(reviewRequest.getReviewerName().equals(this.name)) {
-				reviewRequest.setStatus("closed");
-				reviewRequest.setComments("Its good");
-				reviewRequest.setClosedTime(20); //(new Date()).getTime()
-				reviewRequest.getReviewTime();
+				System.out.println("Enter the status of review: ");
+				status = input.next();
+				System.out.println("Enter the comments about the review: ");
+				comments = input.next();
+				System.out.println("Enter the closing time of review: ");
+				closedTime = input.nextLong();
+				setExpertCommentsAndStatusAndTime(reviewRequest, status, comments, closedTime );
+				
 			}
 		}
 		
+	}
+
+
+	private void setExpertCommentsAndStatusAndTime(ReviewRequest reviewRequest, String status, String comments, long closedTime ) {
+		
+		reviewRequest.setStatus(status);
+		reviewRequest.setComments(comments);
+		reviewRequest.setClosedTime(closedTime);	 //(new Date()).getTime() could be used
+		//reviewRequest.getReviewTime();
 	}
 
 	
