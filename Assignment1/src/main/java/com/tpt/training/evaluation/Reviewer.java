@@ -34,12 +34,21 @@ public class Reviewer extends User{
 		ArrayList<ReviewRequest> reviewRequests = Reviewee.getReviewRequests();
 		for(ReviewRequest reviewRequest : reviewRequests) {
 			if(reviewRequest.getReviewerName().equals(this.name)) {
-				System.out.println("Enter the status of review: ");
+				
+				System.out.println("You are viewing your review request");
+				System.out.println("Module Name: " + reviewRequest.getModuleName());
+				System.out.println("Description of code changes" + reviewRequest.getDescriptionCodeChanges());
+				System.out.println("Status: " + reviewRequest.getStatus());
+				System.out.println("Time of request: " + reviewRequest.getRequestTime());
+				status = Main.getStatus();
+				comments = Main.getComments();
+				closedTime = Main.getClosedTime();
+				/*System.out.println("Enter the status of review: ");
 				status = input.next();
 				System.out.println("Enter the comments about the review: ");
 				comments = input.next();
 				System.out.println("Enter the closing time of review: ");
-				closedTime = input.nextLong();
+				closedTime = input.nextLong();*/
 				setExpertCommentsAndStatusAndTime(reviewRequest, status, comments, closedTime );
 				
 			}

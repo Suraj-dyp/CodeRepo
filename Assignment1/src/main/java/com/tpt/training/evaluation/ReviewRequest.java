@@ -12,6 +12,22 @@ import java.util.Date;
 public class ReviewRequest {
 	
 	private String reviewerName;
+	public String getModuleName() {
+		return moduleName;
+	}
+
+	public String getDescriptionCodeChanges() {
+		return descriptionCodeChanges;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
 	private String moduleName;
 	private String descriptionCodeChanges;
 	private String status;
