@@ -24,13 +24,13 @@ public class Admin extends User {
 		
 	}
 
-	/*public void getReviewers() {
-		for(Reviewer r : reviewers) {
-			System.out.println(r);
+	public ArrayList<Reviewer> getReviewers() {
+		return reviewers;
+			
 		}
 		
-	}*/
+	}
 	
 	
 
-}
+

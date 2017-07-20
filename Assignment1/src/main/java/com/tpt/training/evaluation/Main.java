@@ -3,7 +3,6 @@
  */
 package com.tpt.training.evaluation;
 
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -16,6 +15,7 @@ public class Main {
 	private static Scanner input = new Scanner(System.in);
 	private static final String REVIEWEE = "Reviewee";
 	private static final String REVIEWER = "Reviewer";
+	private static Admin admin = new Admin("Tarun", 10, "tarun.kumar@iongroup.com");
 	//private static ArrayList<String> modules = new ArrayList<String>();
 
 	/**
@@ -115,15 +115,56 @@ public class Main {
 		
 		System.out.println("\nEnter reviewer details:\n");
 		String reviewerName = getName(REVIEWER);
-		String module = getModule();
+		if(!validationRevierName(revieweeName)) {
+			System.out.println("Revieweris not in the list..");
+			getName(REVIEWER);
+		}
+		
+		String module = getModule(reviewerName);
+		if(!validationRevierModule(module, reviewerName)) {
+			System.out.println("The current reviewer is not having this module....");
+			getModule(reviewerName);
+		}
+		
 		String codeChanges = getCodeChangesDesc();
 		String status = getStatus();
 		long requestTime = getRequestTime();
 		reviewee.requestCodeReviews(reviewerName, module, codeChanges, status, requestTime);
 	}
 
+	private static boolean validationRevierModule(String module, String name) {
+		ArrayList<Reviewer> reviewers = admin.getReviewers();
+		int index = 0;
+		for(int i=0; i<admin.getReviewers().size(); i++) {
+			if(reviewers.get(i).getName().equalsIgnoreCase(name)) {
+				index = i;
+				break;
+			}
+		}
+		
+		
+		Reviewer reviewer = reviewers.get(index);
+		for(String moduleReviewer : reviewer.getModules()) {
+			if(moduleReviewer.equalsIgnoreCase(module)) {
+				return true;
+			}
+		}
+		return false;
+		
+	}
+
+	private static boolean validationRevierName(String reviewerName) {
+		for(Reviewer reviewer : admin.getReviewers()) {
+			if(reviewer.getName().equalsIgnoreCase(reviewerName)) {
+				return true;
+			}
+		}
+		return false;
+		
+	}
+
 	private static void addReviewer() {
-		Admin admin = new Admin("Tarun", 10, "tarun.kumar@iongroup.com");
+		
 	 	String choice = "N";
 		do {
 			System.out.println("Adding a reviewer");
@@ -154,9 +195,11 @@ public class Main {
 	}
 
 
-	private static String getModule() {
+	private static String getModule(String name) {
 		System.out.println("Enter Module for the Reviewer: ");
 		String module = input.next();
+		
+		
 
 		return module;
 	}
@@ -197,7 +240,9 @@ public class Main {
 	private static String getName(String role) {
 		System.out.println("\nEnter Name of "+role+" :");
 		String name = input.next();
+		
 		return name;
+		
 	}
 
 	public static String getComments() {

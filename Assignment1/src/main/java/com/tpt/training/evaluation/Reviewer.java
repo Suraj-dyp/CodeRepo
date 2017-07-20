@@ -25,6 +25,12 @@ public class Reviewer extends User{
 		this.modules.addAll(modules);
 	}
 	
+	
+	public ArrayList<String> getModules() {
+		return modules;
+	}
+
+
 	public void accumulateRequest() {
 		
 		String status = null;
