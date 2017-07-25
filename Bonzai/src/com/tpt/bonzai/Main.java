@@ -6,19 +6,15 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 		
-		//Database Handler
-		/*DataBaseHandler dbHandler = new DataBaseHandler();
-		dbHandler.getConnection();
-		dbHandler.getPreparedStatement();*/
 		
-		//CSV Code
-		/*CSVHandler csvHandler = new CSVHandler();
-		csvHandler.csvWrite();*/
+		EOD.retrieveDataForEodCalculate();
+		EOD.insertEodDataInDatabase();
 		
-		//Menu 
-		System.out.println("######## Welcome to End of Day Process(EOD) ###########");
-		System.out.println();
-
+		EODWithTransfer.retrieveDataForEodCalculate();
+		EODWithTransfer.insertEodDataWithTransferInDatabase();
+		
+		
+		
 	}
 
 }
