@@ -17,17 +17,24 @@ public class EOD {
 	public static void insertEodDataInDatabase() {
 		double profitNLoss;
 		int tradeId;
+		double quantity, trade_price, marketPrice;
 		try {
 			while(resultSet.next()) {
 				tradeId = resultSet.getInt(1);
+				quantity = resultSet.getDouble(3);
+				trade_price = resultSet.getDouble(4);
+				marketPrice = resultSet.getDouble(6);
 				profitNLoss = profitNLossCalculate();
 				//System.out.println(profitNLoss);
-				String sqlEODStorage = "INSERT INTO end_of_day values(CURDATE(), ?, ?, ?)";
+				String sqlEODStorage = "INSERT INTO end_of_day values(CURDATE(), ?, ?, ?, ?, ?, ?)";
 
 				preparedStatement = DataBaseHandler.getConnection().prepareStatement(sqlEODStorage);
-				preparedStatement.setInt(1, tradeId);
+				preparedStatement.setDouble(1, tradeId);
 				preparedStatement.setNull(2, java.sql.Types.NULL);
-				preparedStatement.setDouble(3, profitNLoss);
+				preparedStatement.setDouble(3, quantity);
+				preparedStatement.setDouble(4, trade_price);
+				preparedStatement.setDouble(5, marketPrice);
+				preparedStatement.setDouble(6, profitNLoss);
 				preparedStatement.execute();
 			}
 		} catch (SQLException e) {
@@ -50,7 +57,7 @@ public class EOD {
 	}
 	
 	public static void retrieveDataForEodCalculate() {
-		String sqlEOD = "SELECT T.trade_id, T.commodity, T.quantity, T.trade_price, T.currency as trade_price_currency, M.price as market_price, M.currency as market_price_currency from trade_information AS T INNER JOIN market_price AS M where T.commodity = M.commodity AND M.date = CURDATE() ";
+		String sqlEOD = "SELECT T.trade_id, T.commodity, T.quantity, T.trade_price, T.currency as trade_price_currency, M.price as market_price, M.currency as market_price_currency from trade_information AS T INNER JOIN market_price AS M where T.commodity = M.commodity AND M.date = CURDATE() AND T.maturity_date >= CURDATE() ";
 		try {
 			preparedStatement = DataBaseHandler.getConnection().prepareStatement(sqlEOD);
 			resultSet = preparedStatement.executeQuery();

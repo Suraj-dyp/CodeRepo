@@ -10,11 +10,19 @@ public class Main {
 		EOD.retrieveDataForEodCalculate();
 		EOD.insertEodDataInDatabase();
 		
-		EODWithTransfer.retrieveDataForEodCalculate();
-		EODWithTransfer.insertEodDataWithTransferInDatabase();
+		/*EODWithTransfer.retrieveDataForEodCalculate();
+		EODWithTransfer.insertEodDataWithTransferInDatabase();*/
+	
+		//PnLCounterpart.profitNLossForCounterpart();
+		//PnLCounterpart.profitNLossForCounterpartGivenDateRange();
 		
+		//PnLCommodity.profitNLossForCommodities();
 		
+		//FileWriteForEOD.writeEOD();
 		
+		/*switch() {
+		
+		}*/
 	}
 
 }
