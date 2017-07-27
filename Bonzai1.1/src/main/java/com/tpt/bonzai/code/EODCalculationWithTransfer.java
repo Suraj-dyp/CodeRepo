@@ -1,24 +1,19 @@
-/**
- * 
- */
 package com.tpt.bonzai.code;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-/**
- * @author suraj.kumar
- *
- */
-public class EODCalculation {
+public class EODCalculationWithTransfer {
 	
 	static ArrayList<EODAttributes> listEODAttributes = new ArrayList<>();
 	public static void retrieveEODAttributes() {
-		String query = "SELECT T.trade_id, T.commodity, T.quantity, T.trade_price, T.currency AS trade_price_currency,"
-				+ " M.price AS market_price, M.currency AS market_price_currency from trade_information AS T "
-				+ "INNER JOIN market_price AS M WHERE T.commodity = M.commodity AND M.date = CURDATE() AND "
-				+ "T.maturity_date >= CURDATE() ";
+		String query = "SELECT T.transfer_id, T.trade_id, T.commodity, T.quantity, T.transfer_price, "
+				+ "T.currency as transfer_price_currency, M.price as market_price, " 
+				+ "M.currency as market_price_currency from trade_transfer_sk AS T " 
+				+"INNER JOIN market_price AS M INNER JOIN trade_information as TI "
+				+ "WHERE TI.trade_id = T.trade_id and T.commodity = M.commodity AND M.date = CURDATE()"
+				+ "AND TI.maturity_date >= CURDATE() ";
 		
 		final String queryType = "select";
 		DatabaseHelper.makeConnection();
@@ -37,10 +32,11 @@ public class EODCalculation {
 	public static void insertEODAttributesInEODTable() {
 		
 		
-		int tradeId = 0;
+		int transferId = 0, tradeId = 0;
 		double quantity = 0, tradePrice = 0, marketPrice = 0, profitNLoss = 0;
 		DatabaseHelper.makeConnection();
 		for(EODAttributes eodAttributes : listEODAttributes) {
+			transferId = eodAttributes.getTransferId();
 			tradeId = eodAttributes.getTradeId();
 			quantity = eodAttributes.getQuantity(); 
 			tradePrice = eodAttributes.getTradePrice();
@@ -50,7 +46,7 @@ public class EODCalculation {
 			
 			String query = "INSERT IGNORE INTO end_of_day values(CURDATE(), ?, ?, ?, ?, ?, ?)";
 			String queryType = "other";
-			DatabaseHelper.queryExecute(query, queryType, String.valueOf(tradeId), "NULL", String.valueOf(quantity), 
+			DatabaseHelper.queryExecute(query, queryType, String.valueOf(tradeId), String.valueOf(transferId), String.valueOf(quantity), 
 					String.valueOf(tradePrice), String.valueOf(marketPrice), String.valueOf(profitNLoss));
 		}
 		
@@ -70,14 +66,15 @@ public class EODCalculation {
 	private static void storeEODAttributes(ResultSet resultSet) {
 		try {
 			while(resultSet.next()) {
-				int tradeId = resultSet.getInt(1);
-				String commodity = resultSet.getString(2);
-				double quantity = resultSet.getDouble(3);
-				double tradePrice = resultSet.getDouble(4);
-				String tradePriceCurrency = resultSet.getString(5);
-				double marketPrice = resultSet.getDouble(6);
-				String marketPriceCurrency = resultSet.getString(7);
-				EODAttributes eodAttributes = new EODAttributes(tradeId, commodity, quantity,
+				int transferId = resultSet.getInt(1);
+				int tradeId = resultSet.getInt(2);
+				String commodity = resultSet.getString(3);
+				double quantity = resultSet.getDouble(4);
+				double tradePrice = resultSet.getDouble(5);
+				String tradePriceCurrency = resultSet.getString(6);
+				double marketPrice = resultSet.getDouble(7);
+				String marketPriceCurrency = resultSet.getString(8);
+				EODAttributes eodAttributes = new EODAttributes(transferId, tradeId, commodity, quantity,
 						tradePrice, tradePriceCurrency, marketPrice, marketPriceCurrency);
 				listEODAttributes.add(eodAttributes);
 			}

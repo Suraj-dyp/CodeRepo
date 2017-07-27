@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -15,8 +17,8 @@ import java.util.Date;
 public class DatabaseHelper {
 	
 	private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	private static final String DB_URL = "jdbc:mysql://10.101.160.203:3306/bonzai_trading_system?useSSL=false";
-	private static final String USERNAME = "suraj";
+	private static final String DB_URL = "jdbc:mysql://localhost:3306/bonzai_trading_system?useSSL=false";
+	private static final String USERNAME = "root";
 	private static final String PASSWORD = "1234";
 	private static final String TRADE_TABLE = "trade_information";
 	private static final String TRANSFER_TABLE = "trade_transfer";
@@ -70,13 +72,15 @@ public class DatabaseHelper {
 					preparedStatement.setNull(index, java.sql.Types.NULL);
 				}
 				else if(parameter.matches(regexDate)){
-					Date date = Calendar.getInstance().getTime();
-					java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-					preparedStatement.setDate(index, sqlDate);
-//					Finds date in given format
-//					DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//					String formattedDate = dateFormat.format(date);
-//					System.out.println(formattedDate);
+					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			        java.util.Date myDate = null;
+					try {
+						myDate = format.parse(parameter);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+			        java.sql.Date sqlDate = new java.sql.Date(myDate.getTime());
+			        preparedStatement.setDate(index, sqlDate);
 				}
 				else {
 					preparedStatement.setString(index, parameter);
