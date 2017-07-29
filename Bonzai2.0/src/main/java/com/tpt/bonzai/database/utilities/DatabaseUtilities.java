@@ -43,7 +43,7 @@ public class DatabaseUtilities {
 	    }
 	  }
 	
-	public static void printSQLException(SQLException ex) {
+	public  void printSQLException(SQLException ex) {
 	    for (Throwable e : ex) {
 	      if (e instanceof SQLException) {
 	        if (ignoreSQLException(((SQLException)e).getSQLState()) == false) {
@@ -61,7 +61,7 @@ public class DatabaseUtilities {
 	    }
 	  }
 	
-	public static boolean ignoreSQLException(String sqlState) {
+	public  boolean ignoreSQLException(String sqlState) {
 		boolean ignore = false;
 	    if (sqlState == null) {
 	      System.out.println("The SQL state is not defined!");
