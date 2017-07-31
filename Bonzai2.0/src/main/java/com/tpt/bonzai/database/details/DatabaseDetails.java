@@ -4,10 +4,10 @@ public final class DatabaseDetails {
 	
 	private final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	private final String DB_NAME = "bonzai_trading_system"; 
-	private final String IP = "10.101.160.203"; 
+	private final String IP = "localhost"; //10.101.160.203
 	private final int PORT = 3306;
 	private final String DB_URL = "jdbc:mysql://" + IP + ":" + PORT + "/"+ DB_NAME + "?useSSL=false";
-	private final String USERNAME = "suraj";
+	private final String USERNAME = "root";
 	private final String PASSWORD = "1234";
 	
 	private final String TRADE_TABLE = "trade_information";

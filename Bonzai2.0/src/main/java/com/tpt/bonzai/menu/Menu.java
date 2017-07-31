@@ -1,24 +1,27 @@
 package com.tpt.bonzai.menu;
 
-import java.util.HashSet;
+import java.sql.Date;
 import java.util.Scanner;
 
-import com.tpt.bonzai.eod.COB;
-import com.tpt.bonzai.eod.CobPOJOCreation;
-import com.tpt.bonzai.pojo.CobPOJO;
-import com.tpt.bonzai.pojo.ResultPOJO;
-import com.tpt.bonzai.report.Report;
-import com.tpt.bonzai.report.ResultUsingCounterpartPOJOCreation;
-import com.tpt.bonzai.report.ResultUsingTradeAndTransferPOJOCreation;
-import com.tpt.bonzai.report.ResultUsingTradeIdPOJOCreation;
-import com.tpt.bonzai.report.ResultUsingWarehousePOJOCreation;
+import com.tpt.bonzai.eod.EOD;
+import com.tpt.bonzai.eod.TradeRetrieval;
+import com.tpt.bonzai.eod.TransferRetrieval;
+import com.tpt.bonzai.report.EODReport;
+import com.tpt.bonzai.report.ReportByCommodity;
+import com.tpt.bonzai.report.ReportByCounterpart;
+import com.tpt.bonzai.report.ReportByInternalCompany;
+import com.tpt.bonzai.report.ReportByStorage;
+import com.tpt.bonzai.report.ReportByTradeId;
+import com.tpt.bonzai.report.ReportUtility;
+
 
 public class Menu {
 	
+	private ReportUtility reportUtility = new ReportUtility();
 	private Scanner scanner = new Scanner(System.in);
 	private String menu = "1.Run EOD\n2.Show Reports\n3.Exit\nEnter your choice:";
-	private String subMenu = "1.Show Profit/Loss using Trade ID\n2.Show Profit/Loss using Trade ID and Transfer ID"
-			+ "\n3.Show Profit/Loss for a Counterpart\n4.Show Profit/Loss for a Warehouse(Group by Commodity)\n5.Return to Main Menu";
+	private String subMenu = "1.Show Profit/Loss by Trade ID\n2.Show Profit/Loss by Commodity"
+			+ "\n3.Show Profit/Loss by Counterpart\n4.Show Profit/Loss by Interanl Company\n5.Show Profit/Loss by Warehouse\n6.Return to Main Menu";
 	
 	public void menuDisplay() {
 		do {
@@ -32,39 +35,31 @@ public class Menu {
 					System.out.println(subMenu);
 					int subChoice = scanner.nextInt();
 					if(subChoice==1) {
-						//Report using trade
-						ResultUsingTradeIdPOJOCreation resultUsingTradeIdPOJOCCreation = new ResultUsingTradeIdPOJOCreation();
-						resultUsingTradeIdPOJOCCreation.setResultPOJO();
-						HashSet<ResultPOJO> listResultPOJO = resultUsingTradeIdPOJOCCreation.getListResultPOJO();
-						Report report = new Report();
-						report.generateReportUsingTrade(listResultPOJO);
+						//Report using tradeId
+						ReportByTradeId reportByTradeId = new ReportByTradeId();
+						reportByTradeId.generateReport(reportUtility.getTradeId());
 					}
 					else if(subChoice==2) {
-						//Report using trade and transfer
-						ResultUsingTradeAndTransferPOJOCreation resultUsingTradeAndTransferPOJOCreation = new ResultUsingTradeAndTransferPOJOCreation();
-						resultUsingTradeAndTransferPOJOCreation.setResultPOJO();
-						HashSet<ResultPOJO> listResultPOJO = resultUsingTradeAndTransferPOJOCreation.getListResultPOJO();
-						Report report = new Report();
-						report.generateReportUsingTradeAndTransfer(listResultPOJO);
+						//Report using commodity						
+						ReportByCommodity reportByCommodity = new ReportByCommodity();
+						reportByCommodity.generateReport();
 					}
 					else if(subChoice==3) {
 						//Report using counterpart
-						ResultUsingCounterpartPOJOCreation resultUsingCounterpartPOJOCreation = new ResultUsingCounterpartPOJOCreation();
-						resultUsingCounterpartPOJOCreation.setResultPOJO();
-						HashSet<ResultPOJO> listResultPOJO = resultUsingCounterpartPOJOCreation.getListResultPOJO();
-						Report report = new Report();
-						report.generateReportUsingCounterpart(listResultPOJO);
-						
+						ReportByCounterpart reportbyCounterpart = new ReportByCounterpart();
+						reportbyCounterpart.generateReport();
 					}
 					else if(subChoice==4) {
-						//Report using warehouse
-						ResultUsingWarehousePOJOCreation resultUsingWarehousePOJOCreation = new ResultUsingWarehousePOJOCreation();
-						resultUsingWarehousePOJOCreation.setResultPOJO();
-						HashSet<ResultPOJO> listResultPOJO = resultUsingWarehousePOJOCreation.getListResultPOJO();
-						Report report = new Report();
-						report.generateReportUsingWarehouse(listResultPOJO);
+						//Report using internal company
+						ReportByInternalCompany reportByInternalCompany = new ReportByInternalCompany();
+						reportByInternalCompany.generateReport();
 					}
 					else if(subChoice==5) {
+						//Report using warehouse
+						ReportByStorage reportByStorage = new ReportByStorage();
+						reportByStorage.generateReport();
+					}
+					else if(subChoice==6) {
 						break;
 					}
 					else {
@@ -88,17 +83,27 @@ public class Menu {
 	}
 
 	private void runEOD() {
-		CobPOJOCreation cobPOJOCreation = new CobPOJOCreation();
-		COB cob = new COB();
 		
-		cobPOJOCreation.setPOJOForEODCalculation();
-		HashSet<CobPOJO> listCobPOJO = cobPOJOCreation.getListCObPOJO();
-		cob.runEOD(listCobPOJO);
+		Date date = reportUtility.getSQLDate(reportUtility.getDate());
 		
-		cobPOJOCreation.setPOJOForEODCalculation(true);
-		HashSet<CobPOJO> listCobPOJO1 = cobPOJOCreation.getListCObPOJO();
-		cob.runEOD(listCobPOJO, true);
+		TradeRetrieval tradeRetrieval = new TradeRetrieval();
+		tradeRetrieval.readTrade();
+		tradeRetrieval.storeTrade();
+		//tradeRetrieval.displayListTrades();
 		
+		EOD eod = new EOD();
+		eod.setForex(date);
+		eod.storeEOD(tradeRetrieval.getListTrades(), date);
+		
+		TransferRetrieval transferRetrieval = new TransferRetrieval();
+		transferRetrieval.readTransfer();
+		transferRetrieval.storeTransfer();
+		//transferRetrieval.displayListTransfers();
+		
+		eod.storeEOD(transferRetrieval.getListTransfers(), date, true);
+		
+		EODReport  eodReport = new EODReport();
+		eodReport.generateReport(date);
 	}
 
 }

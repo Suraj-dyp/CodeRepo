@@ -8,11 +8,6 @@ import java.sql.SQLException;
 
 public class DatabaseUtilities {
 	
-	public Connection getConnection(String dbURL, String userName, String password) throws SQLException {
-		Connection connection = DriverManager.getConnection(dbURL, userName, password);
-		return connection;
-	}
-	
 	public void closeConnection(Connection connection) {
 	    try {
 	      if (connection != null) {
@@ -42,6 +37,11 @@ public class DatabaseUtilities {
 	      printSQLException(sqle);
 	    }
 	  }
+	
+	public Connection getConnection(String dbURL, String userName, String password) throws SQLException {
+		Connection connection = DriverManager.getConnection(dbURL, userName, password);
+		return connection;
+	}
 	
 	public  void printSQLException(SQLException ex) {
 	    for (Throwable e : ex) {

@@ -1,5 +1,7 @@
 package com.tpt.bonzai.report;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
@@ -8,10 +10,21 @@ public class ReportUtility {
 	
 	private Scanner scanner = new Scanner(System.in);
 	
+	public String getFilePath() {
+		System.out.println("Enter File Path:");
+		String path = scanner.nextLine();
+		return path;
+	}
 	public String getCounterpartName() {
 		System.out.println("Enter Counterpart name:");
 		String counterpartName = scanner.nextLine();
 		return counterpartName;
+	}
+	
+	public String getInternalCompanyName() {
+		System.out.println("Enter Internal Company name:");
+		String internalCompanyName = scanner.nextLine();
+		return internalCompanyName;
 	}
 	
 	public String getWarehouseName() {
@@ -21,9 +34,9 @@ public class ReportUtility {
 	}
 	
 	
-	public String getDate(String infoDate) {	
-    	System.out.println("Enter the " + infoDate + " date in format: (YYYY-MM-DD) ");
-    	String userDate = scanner.next();
+	public String getDate() {	
+    	System.out.println("Enter the COB date in format: (YYYY-MM-DD) ");
+    	String userDate = scanner.nextLine();
 		return userDate;
 	}
 	
@@ -46,10 +59,22 @@ public class ReportUtility {
 		return tradeId;
 	}
 	
-	public int getTransferId() {
-		System.out.println("Enter Transfer ID:");
-		int transferId = scanner.nextInt();
-		return transferId;
+	public String getCommodity() {
+		System.out.println("Enter Commodity:");
+		String commodity = scanner.nextLine();
+		return commodity;
+	}
+	
+	public void displayReport(ResultSet resultSet, int numberIterations) {
+		try {
+			while(resultSet.next()) {
+				for(int i=1; i<=numberIterations; i++)
+					System.out.print(resultSet.getString(i) + "  ");
+				System.out.println();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
